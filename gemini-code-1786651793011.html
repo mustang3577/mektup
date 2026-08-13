@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <!-- iOS için ekran yakınlaştırmasını ve güvenli alanları (çentik) ayarlayan meta etiketleri -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Benim İçin Çok Özelsin ❤️</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            min-height: 100vh;
+            min-height: -webkit-fill-available; /* Safari için tam ekran yüksekliği düzeltmesi */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            overflow: hidden;
+            color: #4a4a4a;
+            
+            /* iOS Safari için metin seçmeyi ve gri tıklama efektini kapatma */
+            -webkit-touch-callout: none; 
+            -webkit-user-select: none; 
+            user-select: none; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.92);
+            padding: 40px 30px;
+            border-radius: 28px; /* iOS tarzı daha yumuşak köşeler */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* Safari blur desteği */
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            touch-action: manipulation; /* Tıklama gecikmesini önler */
+        }
+
+        .card:active {
+            transform: scale(0.96); /* Dokunulduğunda hafif küçülme efekti */
+        }
+
+        .step-tag {
+            display: inline-block;
+            font-size: 0.85rem;
+            color: #ff6b81;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .message {
+            font-size: 1.25rem;
+            line-height: 1.5;
+            color: #2d3436;
+            font-weight: 500;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .hint {
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: #a4b0be;
+            animation: pulse 1.8s infinite;
+        }
+
+        .heart-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="touchCard">
+        <span class="heart-icon" id="icon">✨</span>
+        <span class="step-tag" id="stepTag">Sana Bir Mesajım Var</span>
+        <div class="message" id="messageText">
+            Devam etmek için ekrana dokunur musun? 🤍
+        </div>
+        <div class="hint" id="hintText">Devam etmek için dokun 👆</div>
+    </div>
+
+    <script>
+        const steps = [
+            {
+                icon: "🥺",
+                tag: "Adım 1 / 5",
+                text: "Seni istemeden de olsa kırdığım veya üzdüğüm her an için tüm kalbimle özür dilerim... Seni incitmek, seni huzursuz etmek isteyeceğim en son şey bile değil."
+            },
+            {
+                icon: "❤️",
+                tag: "Adım 2 / 5",
+                text: "Seni kelimelerle anlatamayacağım kadar çok seviyorum. Tek amacım, bu sevgiyi kendini en güvende hissedeceğin yer yapmak ve seni hep çok mutlu etmek."
+            },
+            {
+                icon: "📱✨",
+                tag: "Adım 3 / 5",
+                text: "Bu arada... Gizlediğin o TikTok videosu var ya? Benim için gerçekten dünyalara bedel. Ona her baktığımda şansıma bir kez daha şükrediyorum."
+            },
+            {
+                icon: "⏳⌛",
+                tag: "Adım 4 / 5",
+                text: "Sana sımsıkı sarılmak, gözlerinin içine bakıp yanında ne kadar huzurlu olduğumuzu sana hissettirmek için sabırsızlanıyorum. Sana kavuşacağımız anı iple çekiyorum..."
+            },
+            {
+                icon: "🌹🥰",
+                tag: "Son Adım",
+                text: "İyi ki varsın sevgilim. Seni hiç yormadan, sadece çok severek, çok mutlu etmek istiyorum! ❤️"
+            }
+        ];
+
+        let currentStep = -1;
+
+        // iPhone'da tıklama (tap) işlemlerini daha pürüzsüz yakalamak için click event listener
+        document.getElementById('touchCard').addEventListener('click', function() {
+            currentStep++;
+            
+            if (currentStep >= steps.length) {
+                currentStep = 0; 
+            }
+
+            const messageEl = document.getElementById("messageText");
+            const iconEl = document.getElementById("icon");
+            const stepTagEl = document.getElementById("stepTag");
+            const hintEl = document.getElementById("hintText");
+
+            // Animasyon sıfırlama
+            messageEl.style.animation = 'none';
+            messageEl.offsetHeight; 
+            messageEl.style.animation = 'fadeIn 0.5s ease-in-out';
+
+            iconEl.textContent = steps[currentStep].icon;
+            stepTagEl.textContent = steps[currentStep].tag;
+            messageEl.textContent = steps[currentStep].text;
+
+            if (currentStep === steps.length - 1) {
+                hintEl.textContent = "Baştan okumak için dokun 🔄";
+            } else {
+                hintEl.textContent = "Devam etmek için dokun 👆";
+            }
+        });
+    </script>
+</body>
+</html>
